@@ -9,14 +9,7 @@ def script():
 
 @app.route('/')
 def index():
-   con = psycopg2.connect(host="lkdb", dbname="bd", user="scott", password="tiger")
-
-   cur = con.cursor()
-   cur.execute("SELECT * FROM naukowiec")
-
-   rows = cur.fetchall()
-
-   return render_template('start.html', things=rows)
+   return render_template('start.html')
 
 if __name__ == '__main__':
    app.run(debug = True)
