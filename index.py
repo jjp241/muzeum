@@ -1,31 +1,50 @@
-from flask import Flask, render_template, url_for
+from flask import Flask,\
+                  render_template,\
+                  url_for,\
+                  request,\
+                  flash
 import psycopg2
 
+import sql_scripts
+from utils import get_cursor
+
 app = Flask(__name__, static_url_path='')
+app.config['SECRET_KEY'] = "2b3f12f3ef12a6c86b"
+
 
 @app.route('/erd/')
 def erd():
    return render_template('erd.html')
 
+
 @app.route('/script/')
 def script():
-   return render_template('script.html')
+   return render_template('script.html',
+                          init_script=sql_scripts.DB_INIT)
 
-def has_no_empty_params(rule):
-   defaults = rule.defaults if rule.defaults is not None else ()
-   arguments = rule.arguments if rule.arguments is not None else ()
-   return len(defaults) >= len(arguments)
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
-   links = []
-   for rule in app.url_map.iter_rules():
-      if "GET" in rule.methods and has_no_empty_params(rule):
-         url = url_for(rule.endpoint, **(rule.defaults or {}))
-         links.append((url, rule.endpoint))
+   cur, connection = get_cursor()
 
-   return render_template('start.html', links=links)
+   if request.method == 'POST':
+      if request.form.get('create'):
+         cur.execute(sql_scripts.DB_INIT)   
+         flash('Pomyślnie utworzono bazę!')
+      elif  request.form.get('drop'):
+         cur.execute(sql_scripts.DROP_DB)
+         flash('Tabele usunięte!')
 
-if __name__ == '__main__':
-   app.run(debug = True)
+   visible_tables = []
+   cur.execute(sql_scripts.LIST_TABLES)   
+
+   visible_tables = cur.fetchall()
+   visible_tables = list(sum(visible_tables, ())) # dziwna sztuczka na "spłasczenie listy"
+
+   return render_template('start.html',
+                          connection=connection,
+                          tables=visible_tables)
+
+if __name__ == "__main__":
+   app.run(debug=True)
 

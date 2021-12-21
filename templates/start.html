@@ -19,14 +19,53 @@
                         Numery indeksów: <strong> jp429585+ap406275 </strong> </br>                    
                     </p>
                 </div>
-                <div class="card fluid">
-                    <h4> Lista zdefiniowanych adresów: </h4>
-                    <ul>
-                        {% for url, endpoint in links %}
-                        <li><a href="{{ url }}">{{ endpoint }}</a></li>
-                        {% endfor %}
-                    </ul>
-                </div>
+
+                {% if connection %}
+                    <div class="container">
+                        <div class="row">
+                            <form method ="post" action="{{ url_for('index') }}">
+                                <input class="tertiary doc" type="submit" name="create" value="Stwórz tabele">
+                                <input class="secondary doc" type="submit" name="drop" value="Wyczyść bazę">
+                            </form> 
+                        </div>
+                        <div class="row">
+                            {% for message in get_flashed_messages() %}
+                                <div class="card">
+                                <div class="section dark"> {{ message }} </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="card fluid">
+                        <h4> Lista widocznych tabel: </h4>     
+                        <table>
+                        <thead>
+                            <tr>
+                            <th>Nazwa</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for table in tables %}
+                                <tr>
+                                    <td data-label="Nazwa"> {{ table }} </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="card error">
+                        <h4> Uwaga! </h4>
+                        <p> 
+                            Nie udało się nawiązać połączenia z bazą danych!   
+                            Większość funkcjonalności może być ukryta lub niedostępna.   
+                            <div class="spinner"></div>     
+                        </p>
+                    </div>
+                {% endif %}
+                
+                
             </main>
     
             <footer class="sticky">
