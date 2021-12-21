@@ -6,10 +6,9 @@
     <body>
         <div id="root">
             <header class="sticky">
-                <a href="/" class="logo">MIM Muzeum</a>
-                <a href="/erd" class="button">Model ERD</a>
-                <a href="/erd" class="button">Skrypt</a>
-                <a href="#" class="button">Wyświetl zawartość</a>
+                <a href={{ url_for('index') }} class="logo">MIM Muzeum</a>
+                <a href={{ url_for('erd') }} class="button">Model ERD</a>
+                <a href={{ url_for('script') }} class="button">Skrypt</a>
             </header>
 
             <main>
@@ -17,13 +16,16 @@
                     <h3> Muzeum </h3> 
                     <p> 
                         Projekt na przedmiot Bazy Danych (inf 2021/2022) - program do obsługi muzeum i eksponatów. </br>
-                        Numery indeksów: 
-                        <strong> jp429585+ap406275 </strong>
-    
+                        Numery indeksów: <strong> jp429585+ap406275 </strong> </br>                    
                     </p>
                 </div>
                 <div class="card fluid">
-                    
+                    <h4> Lista zdefiniowanych adresów: </h4>
+                    <ul>
+                        {% for url, endpoint in links %}
+                        <li><a href="{{ url }}">{{ endpoint }}</a></li>
+                        {% endfor %}
+                    </ul>
                 </div>
             </main>
     

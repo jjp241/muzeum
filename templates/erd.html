@@ -1,36 +1,27 @@
 <html>
     <head>
         <link rel="stylesheet" href="https://cdn.rawgit.com/Chalarangelo/mini.css/v3.0.1/dist/mini-default.min.css">
-        <title>Rzeczy</title>
+        <title>Model ERD</title>
     </head>
     <body>
         <div id="root --back-color='ffffff">
             <header class="sticky">
-                <a href="/" class="logo">MIM Muzeum</a>
-                <a href="/erd" class="button">Model ERD</a>
-                <a href="/erd" class="button">Skrypt</a>
-                <a href="$" class="button">Wyświetl zawartość</a>
+                <a href={{ url_for('index') }} class="logo">MIM Muzeum</a>
+                <a href={{ url_for('erd') }} class="button">Model ERD</a>
+                <a href={{ url_for('script') }} class="button">Skrypt</a>
             </header>
+
 
             <main>
                 <div class="card fluid">
-                    <h3> Muzeum </h3> 
-                    <p> 
-                        Projekt na przedmiot Bazy Danych (inf 2021/2022) - program do obsługi muzeum i eksponatów. </br>
-                        Numery indeksów: 
-                        <strong> jp429585+ap406275 </strong>
-    
-                    </p>
+                    <h3> Projekt ERD </h3> 
                 </div>
                 <div class="card fluid">
-                    
+                    <figure>
+                        <img src="{{url_for('static', filename='erd_bazy.png')}}"" alt="database erd model"/>
+                    </figure>
                 </div>
             </main>
-    
-            <pre>function sum(num1, num2){
-                return num1 + num2;
-                }
-            </pre>
     
             <footer class="sticky">
                 <p>Jakub Podolak, Agnieszka Jaszowska. MIMUW 2021</p>
