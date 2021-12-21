@@ -36,10 +36,12 @@ def index():
          flash('Tabele usunięte!')
 
    visible_tables = []
-   cur.execute(sql_scripts.LIST_TABLES)   
 
-   visible_tables = cur.fetchall()
-   visible_tables = list(sum(visible_tables, ())) # dziwna sztuczka na "spłasczenie listy"
+   if connection:
+      cur.execute(sql_scripts.LIST_TABLES)   
+
+      visible_tables = cur.fetchall()
+      visible_tables = list(sum(visible_tables, ())) # dziwna sztuczka na "spłasczenie listy"
 
    return render_template('start.html',
                           connection=connection,
