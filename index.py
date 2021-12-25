@@ -25,14 +25,16 @@ def script():
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-   cur, connection = get_cursor()
+   cur, con, connection = get_cursor()
 
    if request.method == 'POST':
       if request.form.get('create'):
          cur.execute(sql_scripts.DB_INIT)   
+         con.commit()
          flash('Pomyślnie utworzono bazę!')
       elif  request.form.get('drop'):
          cur.execute(sql_scripts.DROP_DB)
+         con.commit()
          flash('Tabele usunięte!')
 
    visible_tables = []

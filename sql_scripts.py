@@ -107,6 +107,6 @@ EXECUTE PROCEDURE f1();
 LIST_TABLES = """
     SELECT tablename
     FROM pg_catalog.pg_tables
-    WHERE schemaname != 'pg_catalog' AND
+    WHERE schemaname = 'scott' AND
     tableowner = 'scott';
 """
