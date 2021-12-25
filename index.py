@@ -14,13 +14,15 @@ app.config['SECRET_KEY'] = "2b3f12f3ef12a6c86b"
 
 @app.route('/erd/')
 def erd():
-   return render_template('erd.html')
+   return render_template('erd.html',
+                          db_correct=check_if_tables_present())
 
 
 @app.route('/script/')
 def script():
    return render_template('script.html',
-                          init_script=sql_scripts.DB_INIT)
+                          init_script=sql_scripts.DB_INIT,
+                          db_correct=check_if_tables_present())
 
 
 @app.route('/view/')
@@ -59,6 +61,12 @@ def insert():
    return render_template('insert.html',
                           connection=connection,
                           artysci=db['artysta'])
+
+
+@app.route('/transfers/')
+def transfers():
+   return render_template('transfers.html')
+
 
 
 @app.route('/', methods=['GET', 'POST'])
