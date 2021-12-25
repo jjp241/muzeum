@@ -104,9 +104,60 @@ AFTER UPDATE OR DELETE ON Eksponat FOR EACH ROW
 EXECUTE PROCEDURE f1();
 """
 
+DB_SAMPLE = """
+    -- Galerie
+    INSERT INTO Galeria VALUES (1001, 'Galeria Klasyków', 4);
+    INSERT INTO Galeria VALUES (1002, 'Galeria Sztuki Nowoczesnej', 3);
+
+    -- Artyści
+    INSERT INTO Artysta VALUES (2001, 'Francesco', 'Ramazotti', '1959-03-09', '2009-10-18');
+    INSERT INTO Artysta VALUES (2002, 'Vincent', 'Moore', '1982-11-12', NULL);
+
+    -- Eksponaty
+    INSERT INTO Eksponat VALUES (3001, 'W poszukiwaniu buga', 'Obraz', 150, 100, 3, 2001);
+    INSERT INTO Eksponat VALUES (3002, 'Null o poranku', 'Obraz', 59, 90, 1, 2001);
+    INSERT INTO Eksponat VALUES (3003, 'Złoty Procesor', 'Rzeźba', 120, 90, 12, 2002);
+
+    -- Instytucje
+    INSERT INTO Instytucja VALUES (4001, 'Prywatne Muzeum w Toruniu', 'Toruń');
+
+    -- Magazynowanie
+    INSERT INTO Magazynowanie VALUES (5001, 3001, '2021-12-02', NULL);
+    INSERT INTO Magazynowanie VALUES (5002, 3002, '2021-12-02', NULL);
+    INSERT INTO Magazynowanie VALUES (5003, 3003, '2021-12-02', NULL);
+"""
+
 LIST_TABLES = """
     SELECT tablename
     FROM pg_catalog.pg_tables
     WHERE schemaname = 'scott' AND
     tableowner = 'scott';
+"""
+
+GET_EKSPONAT = """
+    SELECT * FROM eksponat;
+"""
+
+GET_ARTYSTA = """
+    SELECT * FROM artysta;
+"""
+
+GET_GALERIA = """
+    SELECT * FROM galeria;
+"""
+
+GET_INSTYTUCJA = """
+    SELECT * FROM instytucja;
+"""
+
+GET_MAGAZYNOWANIE = """
+    SELECT * FROM magazynowanie;
+"""
+
+GET_WYPOZYCZENIE = """
+    SELECT * FROM wypozyczenie;
+"""
+
+GET_WYSTAWIENIE = """
+    SELECT * FROM wystawienie;
 """

@@ -1,0 +1,120 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://cdn.rawgit.com/Chalarangelo/mini.css/v3.0.1/dist/mini-default.min.css">
+        <title>Wprowadzanie Danych</title>
+    </head>
+    <body>
+        <div id="root">
+            <header class="sticky">
+                <a href={{ url_for('index') }} class="logo">MIM Muzeum</a>
+                <a href={{ url_for('erd') }} class="button">Model ERD</a>
+                <a href={{ url_for('script') }} class="button">Skrypt</a>
+                <a href={{ url_for('view') }} class="button">Przeglądaj Muzeum</a>
+                <a href={{ url_for('insert') }} class="button">Wprowadzanie Danych</a>
+                <a href={{ url_for('script') }} class="button">Przeniesienie i Wypożyczenia</a>
+            </header>
+
+            <main>
+                <div class="card fluid">
+                    <h3> Wprowadzanie Danych </h3> 
+                </div>
+                {% if connection %}
+                    <form method="post" action="{{ url_for('insert') }}">
+                        <fieldset>
+                        <legend>Dodaj Eksponat</legend>
+                        <div class="row responsive-label">
+                            <div class="col-sm-12 col-md-3">
+                                <label for="id">ID</label>
+                            </div>
+                            <div class="col-sm-12 col-md">
+                                <input type="number" id="id" name="id" placeholder="ID"/>
+                            </div>
+                        </div>
+                        <div class="row responsive-label">
+                            <div class="col-sm-12 col-md-3">
+                                <label for="tytul">Tytuł</label>
+                            </div>
+                            <div class="col-sm-12 col-md">
+                                <input type="text" id="tytul" name="tytul" placeholder="Tytuł"/>
+                            </div>   
+                        </div>
+                        <div class="row responsive-label">
+                            <div class="col-sm-12 col-md-3">
+                                <label for="typ">Typ</label>
+                            </div>
+                            <div class="col-sm-12 col-md">
+                                <select id="typ" name="typ">
+                                    <option> Obraz </option>
+                                    <option> Rzeźba </option>
+                                    <option> Inne </option>
+                                </select>
+                            </div>      
+                        </div>
+                        <div class="row responsive-label">
+                            <div class="col-sm-12 col-md-3">
+                                <label for="wysokosc">Wysokość (cm)</label>
+                            </div>
+                            <div class="col-sm-12 col-md">
+                                <input type="number" id="wysokosc" name="wysokosc" placeholder="Wysokość"/>
+                            </div>
+                        </div>
+                        <div class="row responsive-label">
+                            <div class="col-sm-12 col-md-3">
+                                <label for="szerokosc">Szerokość (cm)</label>
+                            </div>
+                            <div class="col-sm-12 col-md">
+                                <input type="number" id="szerokosc" name="szerokosc" placeholder="Szerokość"/>
+                            </div>
+                        </div>
+                        <div class="row responsive-label">
+                            <div class="col-sm-12 col-md-3">
+                                <label for="waga">Waga (kg)</label>
+                            </div>
+                            <div class="col-sm-12 col-md">
+                                <input type="number" id="waga" name="waga" placeholder="Waga"/>
+                            </div>
+                        </div>
+                        <div class="row responsive-label">
+                            <div class="col-sm-12 col-md-3">
+                                <label for="artysta_id">ID Artysty</label>
+                            </div>
+                            <div class="col-sm-12 col-md">
+                                <select id="artysta_id" name="artysta_id">
+                                    {% for row in artysci %}
+                                        <option> {{ row[0] }} </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row responsive-label">
+                            <div class="col-sm-12 col-md-3">
+                                <input class="tertiary doc" type="submit" id="dodaj_eksponat" name="dodaj_eksponat" value="Dodaj Eksponat">
+                            </div>
+                        </div>
+                        </fieldset>
+                    </form>
+                    {% for message in get_flashed_messages() %}
+                        <div class="card">
+                            <div class="section dark"> {{ message }} </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="card error">
+                        <h4> Uwaga! </h4>
+                        <p> 
+                            Nie udało się nawiązać połączenia z bazą danych!   
+                            Większość funkcjonalności może być ukryta lub niedostępna.   
+                            <div class="spinner"></div>     
+                        </p>
+                    </div>
+                {% endif %}
+                
+                
+            </main>
+    
+            <footer class="sticky">
+                <p>Jakub Podolak, Agnieszka Pałka. MIMUW 2021</p>
+            </footer>
+        </div>
+    </body>
+</html>

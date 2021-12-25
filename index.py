@@ -6,7 +6,7 @@ from flask import Flask,\
 import psycopg2
 
 import sql_scripts
-from utils import get_cursor
+from utils import *
 
 app = Flask(__name__, static_url_path='')
 app.config['SECRET_KEY'] = "2b3f12f3ef12a6c86b"
@@ -23,6 +23,44 @@ def script():
                           init_script=sql_scripts.DB_INIT)
 
 
+@app.route('/view/')
+def view():
+   cur, con, connection = get_cursor()
+   db = get_whole_database()
+   
+   return render_template('view.html',
+                          connection=connection,
+                          eksponaty=db['eksponat'],
+                          artysci=db['artysta'],
+                          galerie=db['galeria'],
+                          instytucje=db['instytucja'],
+                          magazynowanie=db['magazynowanie'],
+                          wystawienie=db['wystawienie'],
+                          wypozyczenie=db['wypozyczenie'])
+
+
+@app.route('/insert/', methods=['GET', 'POST'])
+def insert():
+   cur, con, connection = get_cursor()
+
+   if request.method == 'POST':
+      if request.form.get('dodaj_eksponat'):
+
+         eksponat_form = dict(request.form)
+         
+         try:
+            add_to_db('eksponat', form_to_values(eksponat_form))
+            flash('Pomyślnie dodano eksponat!')
+         except Exception as e:
+            flash(e)
+
+   db = get_whole_database()
+
+   return render_template('insert.html',
+                          connection=connection,
+                          artysci=db['artysta'])
+
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
    cur, con, connection = get_cursor()
@@ -36,18 +74,17 @@ def index():
          cur.execute(sql_scripts.DROP_DB)
          con.commit()
          flash('Tabele usunięte!')
-
-   visible_tables = []
-
-   if connection:
-      cur.execute(sql_scripts.LIST_TABLES)   
-
-      visible_tables = cur.fetchall()
-      visible_tables = list(sum(visible_tables, ())) # dziwna sztuczka na "spłasczenie listy"
-
+      elif  request.form.get('sample'):
+         cur.execute(sql_scripts.DB_INIT)   
+         con.commit()
+         cur.execute(sql_scripts.DB_SAMPLE)
+         con.commit()
+         flash('Utworzono bazę z przykładowymi danymi!')
+         
    return render_template('start.html',
                           connection=connection,
-                          tables=visible_tables)
+                          tables=get_visible_tables(),
+                          db_correct=check_if_tables_present())
 
 if __name__ == "__main__":
    app.run(debug=True)

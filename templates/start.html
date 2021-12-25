@@ -9,6 +9,11 @@
                 <a href={{ url_for('index') }} class="logo">MIM Muzeum</a>
                 <a href={{ url_for('erd') }} class="button">Model ERD</a>
                 <a href={{ url_for('script') }} class="button">Skrypt</a>
+                {% if db_correct %}
+                    <a href={{ url_for('view') }} class="button">Przeglądaj Muzeum</a>
+                    <a href={{ url_for('insert') }} class="button">Wprowadzanie Danych</a>
+                    <a href={{ url_for('script') }} class="button">Przeniesienie i Wypożyczenia</a>
+                {% endif %}
             </header>
 
             <main>
@@ -24,7 +29,8 @@
                     <div class="container">
                         <div class="row">
                             <form method ="post" action="{{ url_for('index') }}">
-                                <input class="tertiary doc" type="submit" name="create" value="Stwórz tabele">
+                                <input class="tertiary doc" type="submit" name="create" value="Stwórz puste tabele">
+                                <input class="primary doc" type="submit" name="sample" value="Stwórz tabele i wypełnij przykładowymi danymi">
                                 <input class="secondary doc" type="submit" name="drop" value="Wyczyść bazę">
                             </form> 
                         </div>

@@ -1,0 +1,136 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://cdn.rawgit.com/Chalarangelo/mini.css/v3.0.1/dist/mini-default.min.css">
+        <title>Przeglądaj Muzeum</title>
+    </head>
+    <body>
+        <div id="root">
+            <header class="sticky">
+                <a href={{ url_for('index') }} class="logo">MIM Muzeum</a>
+                <a href={{ url_for('erd') }} class="button">Model ERD</a>
+                <a href={{ url_for('script') }} class="button">Skrypt</a>
+                <a href={{ url_for('view') }} class="button">Przeglądaj Muzeum</a>
+                <a href={{ url_for('insert') }} class="button">Wprowadzanie Danych</a>
+                <a href={{ url_for('script') }} class="button">Przeniesienie i Wypożyczenia</a>
+            </header>
+
+            <main>
+                <div class="card fluid">
+                    <h3> Przeglądaj Muzeum </h3> 
+                </div>
+
+                {% if connection %}
+                    <div class="card fluid">
+                        <h4> Eksponaty: </h4>     
+                        <table>
+                        <thead>
+                            <tr>
+                            <th>ID</th>
+                            <th>Tytuł</th>
+                            <th>Typ</th>
+                            <th>Wysokość</th>
+                            <th>Szerokość</th>
+                            <th>Waga</th>
+                            <th>Artysta ID</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in eksponaty %}
+                                <tr>
+                                    <td data-label="ID"> {{ row[0] }} </td>
+                                    <td data-label="Tytuł"> {{ row[1] }} </td>
+                                    <td data-label="Typ"> {{ row[2] }} </td>
+                                    <td data-label="Wysokość"> {{ row[3] }} </td>
+                                    <td data-label="Szerokość"> {{ row[4] }} </td>
+                                    <td data-label="Waga"> {{ row[5] }} </td>
+                                    <td data-label="Artysta ID"> {{ row[6] }} </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                        </table>
+                    </div>
+                    <div class="card fluid">
+                        <h4> Artyści: </h4>     
+                        <table>
+                        <thead>
+                            <tr>
+                            <th>ID</th>
+                            <th>Imię</th>
+                            <th>Nazwisko</th>
+                            <th>Rok Urodzenia</th>
+                            <th>Rok Śmierci</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in artysci %}
+                                <tr>
+                                    <td data-label="ID"> {{ row[0] }} </td>
+                                    <td data-label="Imię"> {{ row[1] }} </td>
+                                    <td data-label="Nazwisko"> {{ row[2] }} </td>
+                                    <td data-label="Rok Urodzenia"> {{ row[3] }} </td>
+                                    <td data-label="Rok Śmierci"> {{ row[4] }} </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                        </table>
+                    </div>
+                    <div class="card fluid">
+                        <h4> Galerie: </h4>     
+                        <table>
+                        <thead>
+                            <tr>
+                            <th>ID</th>
+                            <th>Nazwa</th>
+                            <th>Liczba Sal</th>
+                        </thead>
+                        <tbody>
+                            {% for row in galerie %}
+                                <tr>
+                                    <td data-label="ID"> {{ row[0] }} </td>
+                                    <td data-label="Nazwa"> {{ row[1] }} </td>
+                                    <td data-label="Liczba Sal"> {{ row[2] }} </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                        </table>
+                    </div>
+                    <div class="card fluid">
+                        <h4> Instytucje: </h4>     
+                        <table>
+                        <thead>
+                            <tr>
+                            <th>ID</th>
+                            <th>Nazwa</th>
+                            <th>Miasto</th>
+                        </thead>
+                        <tbody>
+                            {% for row in instytucje %}
+                                <tr>
+                                    <td data-label="ID"> {{ row[0] }} </td>
+                                    <td data-label="Nazwa"> {{ row[1] }} </td>
+                                    <td data-label="Miasto"> {{ row[2] }} </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="card error">
+                        <h4> Uwaga! </h4>
+                        <p> 
+                            Nie udało się nawiązać połączenia z bazą danych!   
+                            Większość funkcjonalności może być ukryta lub niedostępna.   
+                            <div class="spinner"></div>     
+                        </p>
+                    </div>
+                {% endif %}
+                
+                
+            </main>
+    
+            <footer class="sticky">
+                <p>Jakub Podolak, Agnieszka Pałka. MIMUW 2021</p>
+            </footer>
+        </div>
+    </body>
+</html>
