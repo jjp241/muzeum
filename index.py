@@ -45,11 +45,10 @@ def view():
 def insert():
    cur, con, connection = get_cursor()
 
-   next_eksponat_id = get_next_free_id('eksponat')
-   next_artysta_id = get_next_free_id('artysta')
-
    if request.method == 'POST':
       if request.form.get('dodaj_eksponat'):
+         next_eksponat_id = get_next_free_id('eksponat')
+         next_artysta_id = get_next_free_id('artysta')
 
          eksponat_form = dict(request.form)
          print(eksponat_form)
@@ -72,6 +71,22 @@ def insert():
             print(e)
             flash(e)
 
+      if request.form.get('dodaj_galerie'):
+         next_galeria_id = get_next_free_id('galeria')
+
+         galeria_form = dict(request.form)
+         galeria_form['id'] = next_galeria_id
+
+         print(galeria_form)
+
+         try:
+            add_to_galeria(galeria_form)
+            flash('Pomyślnie dodano Galerię!')
+         except Exception as e:
+            # TODO - w przypadku błędu trzeba usunąc artyste lub eksponat
+            print(e)
+            flash(e)
+      
    db = get_whole_database()
 
    return render_template('insert.html',

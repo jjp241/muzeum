@@ -8,6 +8,7 @@ TABLE_NAMES = ['artysta', 'galeria', 'eksponat', 'instytucja',\
 
 EKSPONAT_FIELDS = ['id', 'tytul', 'typ', 'wysokosc', 'szerokosc', 'waga', 'artysta_id']
 ARTYSTA_FIELDS = ['id', 'imie', 'nazwisko', 'rok_urodzenia', 'rok_smierci']
+GALERIA_FIELDS = ['id', 'nazwa', 'liczba_sal']
 
 def get_cursor():
    ''' Zwraca parę: kursor, con, stan połączenia '''
@@ -119,7 +120,6 @@ def add_to_eksponat(form_dict):
    con.commit()
 
 
-
 def add_to_artysta(form_dict):
    print('add to artysta')
    artysta_dict = {field: form_dict[field] for field in ARTYSTA_FIELDS}
@@ -134,4 +134,18 @@ def add_to_artysta(form_dict):
    cur, con, connection = get_cursor()
 
    cur.execute(sql_scripts.ADD_TO_ARTYSTA, values)
+   con.commit()
+
+
+def add_to_galeria(form_dict):
+   print('add to galeria')
+   galeria_dict = {field: form_dict[field] for field in GALERIA_FIELDS}
+   fix_form_types(galeria_dict)
+
+   print(galeria_dict)
+
+   values = form_to_values(galeria_dict)
+   cur, con, connection = get_cursor()
+
+   cur.execute(sql_scripts.ADD_TO_GALERIA, values)
    con.commit()

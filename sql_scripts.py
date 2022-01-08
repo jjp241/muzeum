@@ -173,3 +173,9 @@ ADD_TO_ARTYSTA = """
     (id, imie, nazwisko, rok_urodzenia, rok_smierci) 
     VALUES (%s, %s, %s, %s, %s);
 """
+
+ADD_TO_GALERIA = """
+    INSERT INTO galeria
+    (id, nazwa, liczba_sal)
+    VALUES (%s, %s, %s);
+"""

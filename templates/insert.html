@@ -148,6 +148,32 @@
                         </div>
                         </fieldset>
                     </form>
+                    <form method="post" action="{{ url_for('insert') }}">
+                        <fieldset>
+                        <legend>Dodaj Galerię</legend>
+                        <div class="row responsive-label">
+                            <div class="col-sm-12 col-md-3">
+                                <label for="nazwa"> Nazwa Galerii </label>
+                            </div>
+                            <div class="col-sm-12 col-md">
+                                <input type="nazwa" id="nazwa" name="nazwa" placeholder="Nazwa"/>
+                            </div>   
+                        </div>
+                        <div class="row responsive-label">
+                            <div class="col-sm-12 col-md-3">
+                                <label for="liczba_sal">Liczba sal</label>
+                            </div>
+                            <div class="col-sm-12 col-md">
+                                <input type="liczba_sal" id="liczba_sal" name="liczba_sal" placeholder="Liczba sal"/>
+                            </div>
+                        </div>
+                        <div class="row responsive-label">
+                            <div class="col-sm-12 col-md-3">
+                                <input class="tertiary doc" type="submit" id="dodaj_galerie" name="dodaj_galerie" value="Dodaj Galerię">
+                            </div>
+                        </div>
+                        </fieldset>
+                    <form>
                     {% for message in get_flashed_messages() %}
                         <div class="card">
                             <div class="section dark"> {{ message }} </div>
