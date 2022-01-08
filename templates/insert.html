@@ -82,7 +82,7 @@
 
                         <label>
                             <input type="radio" id="no" name="nowy_artysta" value="no" onchange="displayQuestion(this.value)" checked/> 
-                                Istniejący Artysta 
+                                Istniejący Artysta (lub brak)
                         </label>
                         <label>
                             <input type="radio" id="yes" name="nowy_artysta" value="yes" onchange="displayQuestion(this.value)" />
@@ -96,6 +96,7 @@
                                 </div>
                                 <div class="col-sm-12 col-md">
                                     <select id="artysta_id" name="artysta_id">
+                                        <option> Artysta Nieznany </option> 
                                         {% for row in artysci %}
                                             <option> {{ row[0] }} </option>
                                         {% endfor %}

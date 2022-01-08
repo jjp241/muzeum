@@ -62,6 +62,8 @@ def insert():
                add_to_eksponat(eksponat_form)
             if request.form['nowy_artysta'] == 'no':
                eksponat_form['id'] = next_eksponat_id
+               if eksponat_form['artysta_id'] == 'Artysta Nieznany':
+                  eksponat_form['artysta_id'] = ''
                add_to_eksponat(eksponat_form)
 
             flash('Pomyślnie dodano eksponat!')

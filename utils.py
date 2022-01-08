@@ -96,7 +96,7 @@ def fix_form_types(form_dict):
          form_dict[col] = None
  
    for col in TO_INT:
-      if col in form_dict:
+      if col in form_dict and form_dict[col] is not None:
          form_dict[col] = int(form_dict[col])
 
 
