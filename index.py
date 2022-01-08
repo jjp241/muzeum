@@ -49,11 +49,16 @@ def insert():
       if request.form.get('dodaj_eksponat'):
 
          eksponat_form = dict(request.form)
+         print(eksponat_form)
          
          try:
-            add_to_db('eksponat', form_to_values(eksponat_form))
+            add_to_eksponat(eksponat_form)
+            if request.form['nowy_artysta'] == 'yes':
+               print("here")
+               add_to_artysta(eksponat_form)
             flash('Pomyślnie dodano eksponat!')
          except Exception as e:
+            print(e)
             flash(e)
 
    db = get_whole_database()

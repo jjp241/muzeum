@@ -6,6 +6,9 @@ import sql_scripts
 TABLE_NAMES = ['artysta', 'galeria', 'eksponat', 'instytucja',\
                'magazynowanie', 'wypozyczenie', 'wystawienie']
 
+EKSPONAT_FIELDS = ['id', 'tytul', 'typ', 'wysokosc', 'szerokosc', 'waga', 'artysta_id']
+ARTYSTA_FIELDS = ['id', 'imie', 'nazwisko', 'rok_urodzenia', 'rok_smierci']
+
 def get_cursor():
    ''' Zwraca parę: kursor, con, stan połączenia '''
    try:
@@ -75,19 +78,51 @@ def get_whole_database():
    return db
 
 
-def form_to_values(form_dict):
+def fix_form_types(form_dict):
    TO_INT = ['id', 'wysokosc', 'szerokosc', 'waga', 'artysta_id']
+   TO_DATE = ['rok_urodzenia', 'rok_smierci']
 
+   for col in form_dict:
+      if len(form_dict[col]) == 0:
+         form_dict[col] = None
+ 
    for col in TO_INT:
       if col in form_dict:
          form_dict[col] = int(form_dict[col])
 
-   return tuple(list(form_dict.values())[:-1])
+
+def form_to_values(form_dict):
+   return tuple(list(form_dict.values()))
 
 
-def add_to_db(table, values):
+def add_to_eksponat(form_dict):
+   eksponat_dict = {field: form_dict[field] for field in EKSPONAT_FIELDS}
+   fix_form_types(eksponat_dict)
+
+   print('eksponat dict: ')
+   print(eksponat_dict)
+
+   values = form_to_values(eksponat_dict)
+
    cur, con, connection = get_cursor()
 
-   script = f'INSERT INTO {table} VALUES {values};'
-   cur.execute(script)
+   cur.execute(sql_scripts.ADD_TO_EKSPONAT, values)
+   con.commit()
+
+
+
+def add_to_artysta(form_dict):
+   print('add to artysta')
+   artysta_dict = {field: form_dict[field] for field in ARTYSTA_FIELDS}
+   artysta_dict['id'] = form_dict['new_artysta_id']
+   fix_form_types(artysta_dict)
+
+   print('artysta dict:')
+   print(artysta_dict)
+   
+   values = form_to_values(artysta_dict)
+
+   cur, con, connection = get_cursor()
+
+   cur.execute(sql_scripts.ADD_TO_ARTYSTA, values)
    con.commit()

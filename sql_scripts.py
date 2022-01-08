@@ -20,7 +20,7 @@ DROP TABLE IF EXISTS Galeria;
 
 CREATE TABLE Artysta (
     id NUMERIC(4) PRIMARY KEY,
-    imię VARCHAR(40) NOT NULL,
+    imie VARCHAR(40) NOT NULL,
     nazwisko VARCHAR(40) NOT NULL,
     rok_urodzenia DATE NOT NULL,
     rok_smierci DATE
@@ -160,4 +160,16 @@ GET_WYPOZYCZENIE = """
 
 GET_WYSTAWIENIE = """
     SELECT * FROM wystawienie;
+"""
+
+ADD_TO_EKSPONAT = """
+    INSERT INTO eksponat
+    (id, tytul, typ, wysokosc, szerokosc, waga, artysta_id) 
+    VALUES (%s, %s, %s, %s, %s, %s, %s);
+"""
+
+ADD_TO_ARTYSTA = """
+    INSERT INTO artysta
+    (id, imie, nazwisko, rok_urodzenia, rok_smierci) 
+    VALUES (%s, %s, %s, %s, %s);
 """

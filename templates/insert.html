@@ -21,7 +21,7 @@
                 {% if connection %}
                     <form method="post" action="{{ url_for('insert') }}">
                         <fieldset>
-                        <legend>Dodaj Eksponat</legend>
+                        <legend>Dodaj Eksponat (i Artystę)</legend>
                         <div class="row responsive-label">
                             <div class="col-sm-12 col-md-3">
                                 <label for="id">ID</label>
@@ -74,18 +74,88 @@
                                 <input type="number" id="waga" name="waga" placeholder="Waga"/>
                             </div>
                         </div>
-                        <div class="row responsive-label">
-                            <div class="col-sm-12 col-md-3">
-                                <label for="artysta_id">ID Artysty</label>
-                            </div>
-                            <div class="col-sm-12 col-md">
-                                <select id="artysta_id" name="artysta_id">
-                                    {% for row in artysci %}
-                                        <option> {{ row[0] }} </option>
-                                    {% endfor %}
-                                </select>
+
+                        <script>
+                            document.getElementById('yesQuestion').style.display = "block";
+                            // Script to hide and show dependent on radio
+                            function displayQuestion(answer) {
+                                document.getElementById(answer + 'Question').style.display = "block";
+                                if (answer == "yes") { // hide the div that is not selected
+                                    document.getElementById('noQuestion').style.display = "none";
+                                } else if (answer == "no") {
+                                    document.getElementById('yesQuestion').style.display = "none";
+                                }
+                            }
+                        </script>
+
+                        <label>
+                            <input type="radio" id="no" name="nowy_artysta" value="no" onchange="displayQuestion(this.value)" checked/> 
+                                Istniejący Artysta 
+                        </label>
+                        <label>
+                            <input type="radio" id="yes" name="nowy_artysta" value="yes" onchange="displayQuestion(this.value)" />
+                                Nowy Artysta
+                        </label>
+
+                        <div id="noQuestion" style="display:block;"><br/>
+                            <div class="row responsive-label">
+                                <div class="col-sm-12 col-md-3">
+                                    <label for="artysta_id">ID Artysty</label>
+                                </div>
+                                <div class="col-sm-12 col-md">
+                                    <select id="artysta_id" name="artysta_id">
+                                        {% for row in artysci %}
+                                            <option> {{ row[0] }} </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
                             </div>
                         </div>
+
+                        <div id="yesQuestion" style="display:none;"><br/>
+                            <div class="row responsive-label">
+                                <div class="col-sm-12 col-md-3">
+                                    <label for="id">ID Artysty</label>
+                                </div>
+                                <div class="col-sm-12 col-md">
+                                    <input type="number" id="new_artysta_id" name="new_artysta_id" placeholder="ID"/>
+                                </div>
+                            </div>
+                            <div class="row responsive-label">
+                                <div class="col-sm-12 col-md-3">
+                                    <label for="imie">Imię</label>
+                                </div>
+                                <div class="col-sm-12 col-md">
+                                    <input type="text" id="imie" name="imie" placeholder="Imię"/>
+                                </div>   
+                            </div>
+                            <div class="row responsive-label">
+                                <div class="col-sm-12 col-md-3">
+                                    <label for="nazwisko">Nazwisko</label>
+                                </div>
+                                <div class="col-sm-12 col-md">
+                                    <input type="text" id="nazwisko" name="nazwisko" placeholder="Nazwisko"/>
+                                </div>   
+                            </div>
+                            <div class="row responsive-label">
+                                <div class="col-sm-12 col-md-3">
+                                    <label for="data_urodzenia">Data urodzenia</label>
+                                </div>
+                                <div class="col-sm-12 col-md">
+                                    <input type="date" id="rok_urodzenia" name="rok_urodzenia" value="1900-01-01">
+                                </div>   
+                            </div> 
+                            <div class="row responsive-label">
+                                <div class="col-sm-12 col-md-3">
+                                    <label for="data_smierci">Data śmierci</label>
+                                </div>
+                                <div class="col-sm-12 col-md">
+                                    <input type="date" id="rok_smierci" name="rok_smierci">
+                                </div>   
+                            </div>  
+                        </div>
+
+
                         <div class="row responsive-label">
                             <div class="col-sm-12 col-md-3">
                                 <input class="tertiary doc" type="submit" id="dodaj_eksponat" name="dodaj_eksponat" value="Dodaj Eksponat">
