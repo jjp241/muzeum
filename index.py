@@ -45,6 +45,9 @@ def view():
 def insert():
    cur, con, connection = get_cursor()
 
+   next_eksponat_id = get_next_free_id('eksponat')
+   next_artysta_id = get_next_free_id('artysta')
+
    if request.method == 'POST':
       if request.form.get('dodaj_eksponat'):
 
@@ -52,12 +55,18 @@ def insert():
          print(eksponat_form)
          
          try:
-            add_to_eksponat(eksponat_form)
             if request.form['nowy_artysta'] == 'yes':
-               print("here")
+               eksponat_form['id'] = next_eksponat_id
+               eksponat_form['artysta_id'] = next_artysta_id
                add_to_artysta(eksponat_form)
+               add_to_eksponat(eksponat_form)
+            if request.form['nowy_artysta'] == 'no':
+               eksponat_form['id'] = next_eksponat_id
+               add_to_eksponat(eksponat_form)
+
             flash('Pomyślnie dodano eksponat!')
          except Exception as e:
+            # TODO - w przypadku błędu trzeba usunąc artyste lub eksponat
             print(e)
             flash(e)
 

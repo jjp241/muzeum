@@ -106,25 +106,25 @@ EXECUTE PROCEDURE f1();
 
 DB_SAMPLE = """
     -- Galerie
-    INSERT INTO Galeria VALUES (1001, 'Galeria Klasyków', 4);
-    INSERT INTO Galeria VALUES (1002, 'Galeria Sztuki Nowoczesnej', 3);
+    INSERT INTO Galeria VALUES (1, 'Galeria Klasyków', 4);
+    INSERT INTO Galeria VALUES (2, 'Galeria Sztuki Nowoczesnej', 3);
 
     -- Artyści
-    INSERT INTO Artysta VALUES (2001, 'Francesco', 'Ramazotti', '1959-03-09', '2009-10-18');
-    INSERT INTO Artysta VALUES (2002, 'Vincent', 'Moore', '1982-11-12', NULL);
+    INSERT INTO Artysta VALUES (1, 'Francesco', 'Ramazotti', '1959-03-09', '2009-10-18');
+    INSERT INTO Artysta VALUES (2, 'Vincent', 'Moore', '1982-11-12', NULL);
 
     -- Eksponaty
-    INSERT INTO Eksponat VALUES (3001, 'W poszukiwaniu buga', 'Obraz', 150, 100, 3, 2001);
-    INSERT INTO Eksponat VALUES (3002, 'Null o poranku', 'Obraz', 59, 90, 1, 2001);
-    INSERT INTO Eksponat VALUES (3003, 'Złoty Procesor', 'Rzeźba', 120, 90, 12, 2002);
+    INSERT INTO Eksponat VALUES (1, 'W poszukiwaniu buga', 'Obraz', 150, 100, 3, 1);
+    INSERT INTO Eksponat VALUES (2, 'Null o poranku', 'Obraz', 59, 90, 1, 1);
+    INSERT INTO Eksponat VALUES (3, 'Złoty Procesor', 'Rzeźba', 120, 90, 12, 2);
 
     -- Instytucje
-    INSERT INTO Instytucja VALUES (4001, 'Prywatne Muzeum w Toruniu', 'Toruń');
+    INSERT INTO Instytucja VALUES (1, 'Prywatne Muzeum w Toruniu', 'Toruń');
 
     -- Magazynowanie
-    INSERT INTO Magazynowanie VALUES (5001, 3001, '2021-12-02', NULL);
-    INSERT INTO Magazynowanie VALUES (5002, 3002, '2021-12-02', NULL);
-    INSERT INTO Magazynowanie VALUES (5003, 3003, '2021-12-02', NULL);
+    INSERT INTO Magazynowanie VALUES (1, 1, '2021-12-02', NULL);
+    INSERT INTO Magazynowanie VALUES (2, 2, '2021-12-02', NULL);
+    INSERT INTO Magazynowanie VALUES (3, 3, '2021-12-02', NULL);
 """
 
 LIST_TABLES = """

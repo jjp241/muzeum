@@ -78,12 +78,21 @@ def get_whole_database():
    return db
 
 
+def get_next_free_id(table):
+   db = get_whole_database()
+   if len(db[table]) == 0:
+      return 1
+   else:
+      ids = [int(row[0]) for row in db[table]]
+      return max(ids) + 1
+   
+
 def fix_form_types(form_dict):
    TO_INT = ['id', 'wysokosc', 'szerokosc', 'waga', 'artysta_id']
    TO_DATE = ['rok_urodzenia', 'rok_smierci']
 
    for col in form_dict:
-      if len(form_dict[col]) == 0:
+      if type(form_dict[col]) == str and len(form_dict[col]) == 0:
          form_dict[col] = None
  
    for col in TO_INT:
@@ -114,7 +123,7 @@ def add_to_eksponat(form_dict):
 def add_to_artysta(form_dict):
    print('add to artysta')
    artysta_dict = {field: form_dict[field] for field in ARTYSTA_FIELDS}
-   artysta_dict['id'] = form_dict['new_artysta_id']
+   artysta_dict['id'] = form_dict['artysta_id']
    fix_form_types(artysta_dict)
 
    print('artysta dict:')
