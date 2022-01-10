@@ -17,8 +17,52 @@
 
             <main>
                 <div class="card fluid">
-                    <h3> Ta strona jest w budowie! </h3> 
+                    <h3> Wybierz eksponat w celu poznania historii wypożyczeń i magazynowania </h3> 
                 </div>
+                {% if connection %}
+                    <h4> Eksponaty: </h4>     
+                    <table style="max-height: None">
+                    <thead>
+                        <tr>
+                        <th>ID</th>
+                        <th>Tytuł</th>
+                        <th>Typ</th>
+                        <th>Wysokość</th>
+                        <th>Szerokość</th>
+                        <th>Waga</th>
+                        <th>Artysta ID</th>
+                        <th>Imię Artysty</th>
+                        <th>Nazwisko Artysty</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in eksponaty %}
+                            <tr>
+                                <td data-label="ID"> {{ row[0] }} </td>
+                                <td data-label="Tytuł"> 
+                                    <a href={{ url_for('eksponat_transfer', eksponat_id=row[0]) }}>{{ row[1] }} </a>
+                                </td>
+                                <td data-label="Typ"> {{ row[2] }} </td>
+                                <td data-label="Wysokość"> {{ row[3] }} </td>
+                                <td data-label="Szerokość"> {{ row[4] }} </td>
+                                <td data-label="Waga"> {{ row[5] }} </td>
+                                <td data-label="Artysta ID"> {{ row[6] }} </td>
+                                <td data-label="Imię Artysty"> {{ row[7] }} </td>
+                                <td data-label="Nazwisko Artysty"> {{ row[8] }} </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                    </table>
+                {% else %}
+                    <div class="card error">
+                        <h4> Uwaga! </h4>
+                        <p> 
+                            Nie udało się nawiązać połączenia z bazą danych!   
+                            Większość funkcjonalności może być ukryta lub niedostępna.   
+                            <div class="spinner"></div>     
+                        </p>
+                    </div>
+                {% endif %}
             </main>
     
             <footer class="sticky">

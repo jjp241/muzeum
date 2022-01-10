@@ -95,9 +95,24 @@ def insert():
                           artysci=db['artysta'])
 
 
+@app.route("/eksponat_transfer/<int:eksponat_id>")
+def eksponat_transfer(eksponat_id):
+   cur, con, connection = get_cursor()
+
+   return render_template("eksponat_transfer.html",
+                           connection=connection,
+                           id=eksponat_id)
+
+
 @app.route('/transfers/')
 def transfers():
-   return render_template('transfers.html')
+   cur, con, connection = get_cursor()
+
+   eksponaty_with_artysta = get_eksponaty_with_artysta()
+
+   return render_template('transfers.html',
+                          connection=connection,
+                          eksponaty=eksponaty_with_artysta)
 
 
 

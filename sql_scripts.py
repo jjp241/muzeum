@@ -139,7 +139,7 @@ GET_EKSPONAT = """
 """
 
 GET_EKSPONAT_WITH_ARTYSTA = """
-    SELECT eksponat.*, artysta.imie, artysta.nazwisko FROM eksponat INNER JOIN artysta ON eksponat.artysta_id =artysta.id;
+    SELECT eksponat.*, artysta.imie, artysta.nazwisko FROM eksponat LEFT JOIN artysta ON eksponat.artysta_id =artysta.id;
 """
 
 GET_ARTYSTA = """
