@@ -29,10 +29,11 @@ def script():
 def view():
    cur, con, connection = get_cursor()
    db = get_whole_database()
-   
+   eksponaty_with_artysta = get_eksponaty_with_artysta()
+
    return render_template('view.html',
                           connection=connection,
-                          eksponaty=db['eksponat'],
+                          eksponaty=eksponaty_with_artysta,
                           artysci=db['artysta'],
                           galerie=db['galeria'],
                           instytucje=db['instytucja'],

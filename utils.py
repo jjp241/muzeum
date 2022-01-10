@@ -79,6 +79,16 @@ def get_whole_database():
    return db
 
 
+def get_eksponaty_with_artysta():
+   cur, con, connection = get_cursor()
+
+   if not connection:
+      return db 
+   
+   cur.execute(sql_scripts.GET_EKSPONAT_WITH_ARTYSTA)
+   return cur.fetchall()
+
+
 def get_next_free_id(table):
    db = get_whole_database()
    if len(db[table]) == 0:
