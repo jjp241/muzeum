@@ -95,7 +95,7 @@ def insert():
                           artysci=db['artysta'])
 
 
-@app.route("/eksponat_transfer/<int:eksponat_id>")
+@app.route("/eksponat_transfer/<int:eksponat_id>", methods=['GET', 'POST'])
 def eksponat_transfer(eksponat_id):
    cur, con, connection = get_cursor()
 
