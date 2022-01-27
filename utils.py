@@ -2,6 +2,9 @@ import psycopg2
 import psycopg2.extras
 
 import sql_scripts
+import sys
+import traceback
+from flask import flash
 
 TABLE_NAMES = ['artysta', 'galeria', 'eksponat', 'instytucja',\
                'magazynowanie', 'wypozyczenie', 'wystawienie']
@@ -9,6 +12,9 @@ TABLE_NAMES = ['artysta', 'galeria', 'eksponat', 'instytucja',\
 EKSPONAT_FIELDS = ['id', 'tytul', 'typ', 'wysokosc', 'szerokosc', 'waga', 'artysta_id']
 ARTYSTA_FIELDS = ['id', 'imie', 'nazwisko', 'rok_urodzenia', 'rok_smierci']
 GALERIA_FIELDS = ['id', 'nazwa', 'liczba_sal']
+INSTYTUCJA_FIELDS = ['id', 'nazwa', 'miasto']
+WYSTAWIENIE_FIELDS = ['id', 'id_eksponatu', 'sala', 'id_galerii', 'poczatek', 'koniec']
+WYPOZYCZENIE_FIELDS = ['id', 'id_eksponatu', 'id_instytucji', 'poczatek', 'koniec']
 
 def get_cursor():
    ''' Zwraca parę: kursor, con, stan połączenia '''
@@ -80,6 +86,7 @@ def get_whole_database():
 
 
 def get_eksponaty_with_artysta():
+   db = {}
    cur, con, connection = get_cursor()
 
    if not connection:
@@ -99,8 +106,8 @@ def get_next_free_id(table):
    
 
 def fix_form_types(form_dict):
-   TO_INT = ['id', 'wysokosc', 'szerokosc', 'waga', 'artysta_id']
-   TO_DATE = ['rok_urodzenia', 'rok_smierci']
+   TO_INT = ['id', 'wysokosc', 'szerokosc', 'waga', 'artysta_id', 'liczba_sal', 'sala']
+ #  TO_DATE = ['rok_urodzenia', 'rok_smierci', 'poczatek', 'koniec']
 
    for col in form_dict:
       if type(form_dict[col]) == str and len(form_dict[col]) == 0:
@@ -159,3 +166,102 @@ def add_to_galeria(form_dict):
 
    cur.execute(sql_scripts.ADD_TO_GALERIA, values)
    con.commit()
+
+
+def add_to_instytucja(form_dict):
+   print('add to instytucja')
+   instytucja_dict = {field: form_dict[field] for field in INSTYTUCJA_FIELDS}
+   fix_form_types(instytucja_dict)
+
+   print(instytucja_dict)
+
+   values = form_to_values(instytucja_dict)
+   cur, con, connection = get_cursor()
+
+   cur.execute(sql_scripts.ADD_TO_INSTYTUCJA, values)
+   con.commit()
+
+
+def add_to_wystawienie(form_dict):
+   print('add to wystawienie')
+   wystawienie_dict = {field: form_dict[field] for field in WYSTAWIENIE_FIELDS}
+   fix_form_types(wystawienie_dict)
+
+   print(wystawienie_dict)
+
+   values = form_to_values(wystawienie_dict)
+   cur, con, connection = get_cursor()
+
+   cur.execute(sql_scripts.ADD_TO_WYSTAWIENIE, values)
+   con.commit()
+
+def add_to_wypozyczenie(form_dict):
+   print('add to wypozyczenie')
+   wypozyczenie_dict = {field: form_dict[field] for field in WYPOZYCZENIE_FIELDS}
+   fix_form_types(wypozyczenie_dict)
+
+   print(wypozyczenie_dict)
+
+   values = form_to_values(wypozyczenie_dict)
+   cur, con, connection = get_cursor()
+
+   cur.execute(sql_scripts.ADD_TO_WYPOZYCZENIE, values)
+   con.commit()
+
+#cursor.execute('SELECT * FROM t WHERE a = %s, b = %s;', (1, 'baz'))
+def get_wypozyczenia_history(id):
+   db = {}
+   cur, con, connection = get_cursor()
+
+   if not connection:
+      return db 
+   cur.execute('SELECT * FROM wypozyczenie WHERE id_eksponatu = %(foo)s ORDER BY poczatek;',  {'foo': id})
+   return cur.fetchall()
+
+
+def get_wystawienia_history(id):
+   db = {}
+   cur, con, connection = get_cursor()
+
+   if not connection:
+      return db 
+   cur.execute('SELECT * FROM wystawienie WHERE id_eksponatu = %(foo)s ORDER BY poczatek;',  {'foo': id})
+   return cur.fetchall()
+
+def get_current_wystawienie(id, date):
+   db = {}
+   cur, con, connection = get_cursor()
+   if not connection:
+      return db 
+   cur.execute('SELECT nazwa, sala FROM (wystawienie LEFT JOIN galeria\
+       ON wystawienie.id_galerii = galeria.id) WHERE id_eksponatu = %(foo)s \
+      AND poczatek <= %(foo2)s \
+      AND koniec >= %(foo2)s  ORDER BY poczatek;',  {'foo': id, 'foo2' : date})
+   return cur.fetchall()
+
+def get_current_wypozyczenie(id, date):
+   db = {}
+   cur, con, connection = get_cursor()
+   if not connection:
+      return db 
+   cur.execute('SELECT nazwa FROM (wypozyczenie LEFT JOIN instytucja\
+       ON wypozyczenie.id_instytucji = instytucja.id) WHERE id_eksponatu = %(foo)s \
+      AND poczatek <= %(foo2)s \
+      AND koniec >= %(foo2)s  ORDER BY poczatek;',  {'foo': id, 'foo2' : date})
+   return cur.fetchall()
+
+def get_current_state(id, date):
+   curr_wyst = get_current_wystawienie(id, date)
+   if curr_wyst:
+      return "wystawiony w galerii {0} w sali {1}".format(curr_wyst[0][0], curr_wyst[0][1])
+   curr_wyp = get_current_wypozyczenie(id, date)
+   if curr_wyp:
+      return "wypozyczony instytucji {0}".format(curr_wyp[0][0])
+   return "magazynowany"
+      
+
+def internal_error(exception):
+    print(exception)
+    etype, value, tb = sys.exc_info()
+    print(traceback.print_exception(etype, value, tb))
+    flash(sys.exc_info())

@@ -1,7 +1,7 @@
 <html>
     <head>
         <link rel="stylesheet" href="https://cdn.rawgit.com/Chalarangelo/mini.css/v3.0.1/dist/mini-default.min.css">
-        <title>Model ERD</title>
+        <title>Położenie Wybranego Eksponatu</title>
     </head>
     <body>
         <div id="root --back-color='ffffff">
@@ -17,9 +17,167 @@
 
             <main>
                 <div class="card fluid">
-                    <h3> Położenie eksponatu o ID: {{ id }} </h3> 
+                    <h3> Położenie eksponatu o ID {{ id }}: {{stan}}</h3> 
                 </div>
             </main>
+
+            {% if connection %}
+
+            <div class="card fluid">
+                <h4> Historia Wystawień: </h4>     
+                <table>
+                <thead>
+                    <tr>
+                    <th>ID</th>
+                    <th>Galeria ID</th>
+                    <th>Sala</th>
+                    <th>Początek</th>
+                    <th>Koniec</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in historia_wyst %}
+                        <tr>
+                            <td data-label="ID"> {{ row[0] }} </td>
+                            <td data-label="Galeria ID"> {{ row[3] }} </td>
+                            <td data-label="Sala"> {{ row[2] }} </td>
+                            <td data-label="Początek"> {{ row[4] }} </td>
+                            <td data-label="Koniec"> {{ row[5] }} </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                </table>
+            </div>
+
+            <div class="card fluid">
+                <h4> Historia Wypożyczeń: </h4>     
+                <table>
+                <thead>
+                    <tr>
+                    <th>ID</th>
+                    <th>Instytucja ID</th>
+                    <th>Początek</th>
+                    <th>Koniec</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in historia_wyp %}
+                        <tr>
+                            <td data-label="ID"> {{ row[0] }} </td>
+                            <td data-label="Instytucja ID"> {{ row[2] }} </td>
+                            <td data-label="Początek"> {{ row[3] }} </td>
+                            <td data-label="Koniec"> {{ row[4] }} </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                </table>
+            </div>
+
+            <div class="card fluid">
+
+                    <form method="post" action="{{ url_for('eksponat_transfer', eksponat_id = id) }}">
+                        <fieldset>
+                        <legend>Wprowadź Wystawienie w Galerii</legend>
+                        <div class="row responsive-label">
+                            <div class="col-sm-12 col-md-3">
+                                <label for="id_galerii">Galeria</label>
+                            </div>
+                            <div class="col-sm-12 col-md">
+                                <select id="id_galerii" name="id_galerii">
+                                    {% for row in galerie %}
+                                        <option> {{row[0]}} </option>
+                                    {% endfor %}
+                                </select>
+                            </div>      
+                        </div>
+
+                        <div class="row responsive-label">
+                            <div class="col-sm-12 col-md-3">
+                                <label for="sala">Sala</label>
+                            </div>
+                            <div class="col-sm-12 col-md">
+                                <input type="number" min="1" step="1" id="sala" name="sala" placeholder="Sala"/>
+                            </div>
+                        </div>
+                        <div class="row responsive-label">
+                            <div class="col-sm-12 col-md-3">
+                                <label for="poczatek">Początek wystawienia</label>
+                            </div>
+                            <div class="col-sm-12 col-md">
+                                <input type="date" id="poczatek" name="poczatek" value="2000-01-01">
+                            </div>   
+                        </div> 
+                        <div class="row responsive-label">
+                            <div class="col-sm-12 col-md-3">
+                                <label for="koniec">Koniec wystawienia</label>
+                            </div>
+                            <div class="col-sm-12 col-md">
+                                <input type="date" id="koniec" name="koniec" value="2000-01-01">
+                            </div>   
+                        </div>  
+                        <div class="row responsive-label">
+                            <div class="col-sm-12 col-md-3">
+                                <input class="tertiary doc" type="submit" id="dodaj_wystawienie" name="dodaj_wystawienie" value="Dodaj Wystawienie">
+                            </div>
+                        </div>
+                        </fieldset>
+                    </form>
+
+
+                    <form method="post" action="{{ url_for('eksponat_transfer', eksponat_id = id) }}">
+                        <fieldset>
+                        <legend>Wprowadź wypożyczenie innej instytucji</legend>
+                        <div class="row responsive-label">
+                            <div class="col-sm-12 col-md-3">
+                                <label for="id_instytucji">Instytucja</label>
+                            </div>
+                            <div class="col-sm-12 col-md">
+                                <select id="id_instytucji" name="id_instytucji">
+                                    {% for row in instytucje %}
+                                        <option> {{row[0]}} </option>
+                                    {% endfor %}
+                                </select>
+                            </div>      
+                        </div>
+
+                        <div class="row responsive-label">
+                            <div class="col-sm-12 col-md-3">
+                                <label for="poczatek">Początek wypożyczenia</label>
+                            </div>
+                            <div class="col-sm-12 col-md">
+                                <input type="date" id="poczatek" name="poczatek" value="2000-01-01">
+                            </div>   
+                        </div> 
+                        <div class="row responsive-label">
+                            <div class="col-sm-12 col-md-3">
+                                <label for="koniec">Koniec wypożyczenia</label>
+                            </div>
+                            <div class="col-sm-12 col-md">
+                                <input type="date" id="koniec" name="koniec" value="2000-01-01">
+                            </div>   
+                        </div>  
+                        <div class="row responsive-label">
+                            <div class="col-sm-12 col-md-3">
+                                <input class="tertiary doc" type="submit" id="dodaj_wypozyczenie" name="dodaj_wypozyczenie" value="Dodaj Wypożyczenie">
+                            </div>
+                        </div>
+                        </fieldset>
+                    </form>
+                    {% for message in get_flashed_messages() %}
+                        <div class="card">
+                            <div class="section dark"> {{ message }} </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="card error">
+                        <h4> Uwaga! </h4>
+                        <p> 
+                            Nie udało się nawiązać połączenia z bazą danych!   
+                            Większość funkcjonalności może być ukryta lub niedostępna.   
+                            <div class="spinner"></div>     
+                        </p>
+                    </div>
+                {% endif %}
     
             <footer class="sticky">
                 <p>Jakub Podolak, Agnieszka Pałka. MIMUW 2021</p>

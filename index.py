@@ -6,7 +6,10 @@ from flask import Flask,\
 import psycopg2
 
 import sql_scripts
+import traceback
+import sys
 from utils import *
+from datetime import date
 
 app = Flask(__name__, static_url_path='')
 app.config['SECRET_KEY'] = "2b3f12f3ef12a6c86b"
@@ -84,7 +87,6 @@ def insert():
             add_to_galeria(galeria_form)
             flash('Pomyślnie dodano Galerię!')
          except Exception as e:
-            # TODO - w przypadku błędu trzeba usunąc artyste lub eksponat
             print(e)
             flash(e)
       
@@ -99,9 +101,62 @@ def insert():
 def eksponat_transfer(eksponat_id):
    cur, con, connection = get_cursor()
 
+   if request.method == 'POST':
+      if request.form.get('dodaj_wystawienie'):
+         next_wystawienie_id = get_next_free_id('wystawienie')
+
+         wystawienie_form = dict(request.form)
+         wystawienie_form['id'] = next_wystawienie_id
+         wystawienie_form['id_eksponatu'] = eksponat_id
+
+         print(wystawienie_form)
+
+         try:
+            add_to_wystawienie(wystawienie_form)
+            flash('Pomyślnie dodano wystawienie!')
+         except Exception as e:
+            print(e)
+            flash(e)
+
+      if request.form.get('dodaj_wypozyczenie'):
+         next_wypozyczenie_id = get_next_free_id('wypozyczenie')
+
+         wypozyczenie_form = dict(request.form)
+         wypozyczenie_form['id'] = next_wypozyczenie_id
+         wypozyczenie_form['id_eksponatu'] = eksponat_id
+
+         print(wypozyczenie_form)
+
+         try:
+            add_to_wypozyczenie(wypozyczenie_form)
+            flash('Pomyślnie dodano wypozyczenie!')
+         except Exception as e:
+           # internal_error(e)
+            print(e)
+            flash(e)
+
+
+   db = get_whole_database()
+   eksponaty_with_artysta = get_eksponaty_with_artysta()
+   historia_wypozyczen = get_wypozyczenia_history(eksponat_id)
+   historia_wystawien = get_wystawienia_history(eksponat_id)
+   stan = get_current_state(eksponat_id, date.today())
+
    return render_template("eksponat_transfer.html",
                            connection=connection,
-                           id=eksponat_id)
+                           id=eksponat_id,
+                           eksponaty=eksponaty_with_artysta,
+                           historia_wyp=historia_wypozyczen,
+                           historia_wyst=historia_wystawien,
+                           stan=stan,
+                           artysci=db['artysta'],
+                           galerie=db['galeria'],
+                           instytucje=db['instytucja'],
+                           magazynowanie=db['magazynowanie'],
+                           wystawienie=db['wystawienie'],
+                           wypozyczenie=db['wypozyczenie'])
+                           
+
 
 
 @app.route('/transfers/')

@@ -98,7 +98,7 @@
                         </tbody>
                         </table>
                     </div>
-                    <!--
+                    
                     <div class="card fluid">
                         <h4> Instytucje: </h4>     
                         <table>
@@ -119,7 +119,59 @@
                         </tbody>
                         </table>
                     </div>
-                    -->
+
+                    <div class="card fluid">
+                        <h4> Wystawienie: </h4>     
+                        <table>
+                        <thead>
+                            <tr>
+                            <th>ID</th>
+                            <th>ID Eksponatu</th>
+                            <th>Sala</th>
+                            <th>ID Galerii</th>
+                            <th>Początek</th>
+                            <th>Koniec</th>
+                        </thead>
+                        <tbody>
+                            {% for row in wystawienie %}
+                                <tr>
+                                    <td data-label="ID"> {{ row[0] }} </td>
+                                    <td data-label="ID Eksponatu"> {{ row[1] }} </td>
+                                    <td data-label="Sala"> {{ row[2] }} </td>
+                                    <td data-label="ID Galerii"> {{ row[3] }} </td>
+                                    <td data-label="Początek"> {{ row[4] }} </td>
+                                    <td data-label="Koniec"> {{ row[5] }} </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                        </table>
+                    </div>
+
+                    <div class="card fluid">
+                        <h4> Wypozyczenia: </h4>     
+                        <table>
+                        <thead>
+                            <tr>
+                            <th>ID</th>
+                            <th>ID Eksponatu</th>
+                            <th>ID Instytucji</th>
+                            <th>Początek</th>
+                            <th>Koniec</th>
+                        </thead>
+                        <tbody>
+                            {% for row in wypozyczenie %}
+                                <tr>
+                                    <td data-label="ID"> {{ row[0] }} </td>
+                                    <td data-label="ID Eksponatu"> {{ row[1] }} </td>
+                                    <td data-label="ID Instytucji"> {{ row[2] }} </td>
+                                    <td data-label="Początek"> {{ row[3] }} </td>
+                                    <td data-label="Koniec"> {{ row[4] }} </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                        </table>
+                    </div>
+                    
                 {% else %}
                     <div class="card error">
                         <h4> Uwaga! </h4>
