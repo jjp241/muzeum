@@ -8,7 +8,7 @@ from flask import flash
 from datetime import date
 
 TABLE_NAMES = ['artysta', 'galeria', 'eksponat', 'instytucja',\
-               'magazynowanie', 'wypozyczenie', 'wystawienie']
+               'wypozyczenie', 'wystawienie']
 
 EKSPONAT_FIELDS = ['id', 'tytul', 'typ', 'wysokosc', 'szerokosc', 'waga', 'artysta_id']
 ARTYSTA_FIELDS = ['id', 'imie', 'nazwisko', 'rok_urodzenia', 'rok_smierci']
@@ -73,9 +73,6 @@ def get_whole_database():
 
    cur.execute(sql_scripts.GET_INSTYTUCJA)
    db.update({'instytucja': cur.fetchall()})
-
-   cur.execute(sql_scripts.GET_MAGAZYNOWANIE)
-   db.update({'magazynowanie': cur.fetchall()})
 
    cur.execute(sql_scripts.GET_WYPOZYCZENIE)
    db.update({'wypozyczenie': cur.fetchall()})
@@ -279,13 +276,6 @@ def get_eksponat_name(id):
    cur.execute('SELECT tytul FROM eksponat WHERE id = %(id_eksponat)s;', {'id_eksponat': id})
    return cur.fetchall()[0][0]
       
-
-def internal_error(exception):
-    print(exception)
-    etype, value, tb = sys.exc_info()
-    print(traceback.print_exception(etype, value, tb))
-    flash(sys.exc_info())
-
 
 def get_view():
    eksponaty_artysta = get_eksponaty_with_artysta()

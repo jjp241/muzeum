@@ -7,8 +7,6 @@ from flask import Flask,\
 import psycopg2
 
 import sql_scripts
-import traceback
-import sys
 from utils import *
 from datetime import date
 
@@ -41,7 +39,6 @@ def db_state():
                           artysci=db['artysta'],
                           galerie=db['galeria'],
                           instytucje=db['instytucja'],
-                          magazynowanie=db['magazynowanie'],
                           wystawienie=db['wystawienie'],
                           wypozyczenie=db['wypozyczenie'])
 
@@ -93,7 +90,6 @@ def insert():
 
             flash('Pomyślnie dodano eksponat!')
          except Exception as e:
-            # TODO - w przypadku błędu trzeba usunąc artyste lub eksponat
             print(e)
             flash(e)
 
@@ -153,7 +149,6 @@ def eksponat_transfer(eksponat_id):
             add_to_wypozyczenie(wypozyczenie_form)
             flash('Pomyślnie dodano wypozyczenie!')
          except Exception as e:
-           # internal_error(e)
             print(e)
             flash(e)
 
@@ -177,7 +172,6 @@ def eksponat_transfer(eksponat_id):
                            artysci=db['artysta'],
                            galerie=db['galeria'],
                            instytucje=db['instytucja'],
-                           magazynowanie=db['magazynowanie'],
                            wystawienie=db['wystawienie'],
                            wypozyczenie=db['wypozyczenie'])
                            

@@ -4,7 +4,6 @@ DROP TABLE IF EXISTS Eksponat CASCADE;
 DROP TABLE IF EXISTS Instytucja CASCADE;
 DROP TABLE IF EXISTS Wypozyczenie;
 DROP TABLE IF EXISTS Wystawienie;
-DROP TABLE IF EXISTS Magazynowanie;
 DROP TABLE IF EXISTS Galeria;
 """
 
@@ -15,7 +14,6 @@ DROP TABLE IF EXISTS Eksponat CASCADE;
 DROP TABLE IF EXISTS Instytucja CASCADE;
 DROP TABLE IF EXISTS Wypozyczenie;
 DROP TABLE IF EXISTS Wystawienie;
-DROP TABLE IF EXISTS Magazynowanie;
 DROP TABLE IF EXISTS Galeria;
 
 CREATE TABLE Artysta (
@@ -48,13 +46,6 @@ CREATE TABLE Instytucja (
     miasto VARCHAR(40) NOT NULL
 );
 
-CREATE TABLE Magazynowanie (
-    id NUMERIC(4) PRIMARY KEY,
-    id_eksponatu NUMERIC(4) NOT NULL REFERENCES Eksponat,
-    poczatek DATE,
-    koniec DATE
-);
-
 CREATE TABLE Wystawienie (
     id NUMERIC(4) PRIMARY KEY,
     id_eksponatu NUMERIC(4) NOT NULL REFERENCES Eksponat,
@@ -71,12 +62,6 @@ CREATE TABLE Wypozyczenie (
     poczatek DATE NOT NULL,
     koniec DATE  NOT NULL
 );
-
-/*
-    Potrzebne TRIGGERY:
-    - trigger zapewniający, że żaden eksponat nie przebywa poza muzeum dłużej niż 30 dni rocznie
-    - muzeum powinno zawsze mieć w swoich galeriach lub w magazynie co najmniej jeden eksponat każdego artysty.
-*/
 
 
 -- Trigger zapewniający, że trzymamy tylko artystów, którzy są autorami jakichś eksponatów
@@ -146,10 +131,10 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+
 CREATE TRIGGER t6
 BEFORE INSERT OR UPDATE ON Wystawienie FOR EACH ROW
 EXECUTE PROCEDURE f5();
-
 
 CREATE TRIGGER t7
 BEFORE INSERT OR UPDATE ON Wypozyczenie FOR EACH ROW
@@ -300,10 +285,6 @@ DB_SAMPLE = """
     -- Instytucje
     INSERT INTO Instytucja VALUES (1, 'Prywatne Muzeum w Toruniu', 'Toruń');
 
-    -- Magazynowanie
-    INSERT INTO Magazynowanie VALUES (1, 1, '2021-12-02', NULL);
-    INSERT INTO Magazynowanie VALUES (2, 2, '2021-12-02', NULL);
-    INSERT INTO Magazynowanie VALUES (3, 3, '2021-12-02', NULL);
 """
 
 LIST_TABLES = """
@@ -331,10 +312,6 @@ GET_GALERIA = """
 
 GET_INSTYTUCJA = """
     SELECT * FROM instytucja;
-"""
-
-GET_MAGAZYNOWANIE = """
-    SELECT * FROM magazynowanie;
 """
 
 GET_WYPOZYCZENIE = """

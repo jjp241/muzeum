@@ -132,7 +132,6 @@
                         </div>
                     {% endfor %}
 
-
                     <form method="post" action="{{ url_for('eksponat_transfer', eksponat_id = id) }}">
                         <fieldset>
                         <legend>Wprowadź wypożyczenie innej instytucji</legend>
@@ -176,7 +175,7 @@
                         <div class="card">
                             <div class="section dark"> {{ message }} </div>
                         </div>
-                    {% endfor %}
+                    {% endfor %}                   
                 {% else %}
                     <div class="card error">
                         <h4> Uwaga! </h4>
