@@ -58,7 +58,7 @@ def index():
 
    if request.method == 'POST':
       if request.form.get('login') == 'muzeum' and request.form.get('password') == 'admin':
-         return redirect("/admin/")
+         return redirect(url_for('admin'))
       else:
          flash('Błędny login/hasło!')
 
