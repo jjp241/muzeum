@@ -5,6 +5,7 @@ import sql_scripts
 import sys
 import traceback
 from flask import flash
+from datetime import date
 
 TABLE_NAMES = ['artysta', 'galeria', 'eksponat', 'instytucja',\
                'magazynowanie', 'wypozyczenie', 'wystawienie']
@@ -83,6 +84,16 @@ def get_whole_database():
    db.update({'wystawienie': cur.fetchall()})
 
    return db
+
+def get_eksponaty():
+   db = {}
+   cur, con, connection = get_cursor()
+
+   if not connection:
+      return db 
+   
+   cur.execute(sql_scripts.GET_EKSPONAT)
+   return cur.fetchall()
 
 
 def get_eksponaty_with_artysta():
@@ -258,6 +269,15 @@ def get_current_state(id, date):
    if curr_wyp:
       return "wypozyczony instytucji {0}".format(curr_wyp[0][0])
    return "magazynowany"
+
+
+def get_eksponat_name(id):
+   db = {}
+   cur, con, connection = get_cursor()
+   if not connection:
+      return db 
+   cur.execute('SELECT tytul FROM eksponat WHERE id = %(id_eksponat)s;', {'id_eksponat': id})
+   return cur.fetchall()[0][0]
       
 
 def internal_error(exception):
@@ -265,3 +285,12 @@ def internal_error(exception):
     etype, value, tb = sys.exc_info()
     print(traceback.print_exception(etype, value, tb))
     flash(sys.exc_info())
+
+
+def get_view():
+   eksponaty_artysta = get_eksponaty_with_artysta()
+
+   for i in range(len(eksponaty_artysta)):
+      eksponaty_artysta[i] += (get_current_state(int(eksponaty_artysta[i][0]), date.today()),)
+      
+   return eksponaty_artysta

@@ -2,7 +2,8 @@ from flask import Flask,\
                   render_template,\
                   url_for,\
                   request,\
-                  flash
+                  flash,\
+                  redirect
 import psycopg2
 
 import sql_scripts
@@ -28,21 +29,42 @@ def script():
                           db_correct=check_if_tables_present())
 
 
-@app.route('/view/')
-def view():
+@app.route('/db_state/')
+def db_state():
    cur, con, connection = get_cursor()
    db = get_whole_database()
-   eksponaty_with_artysta = get_eksponaty_with_artysta()
+   eksponaty = get_eksponaty()
 
-   return render_template('view.html',
+   return render_template('db_state.html',
                           connection=connection,
-                          eksponaty=eksponaty_with_artysta,
+                          eksponaty=eksponaty,
                           artysci=db['artysta'],
                           galerie=db['galeria'],
                           instytucje=db['instytucja'],
                           magazynowanie=db['magazynowanie'],
                           wystawienie=db['wystawienie'],
                           wypozyczenie=db['wypozyczenie'])
+
+
+@app.route('/', methods=['GET', 'POST'])
+def index():
+   cur, con, connection = get_cursor()
+   
+   view_data = []
+   try:
+      view_data = get_view()
+   except Exception:
+      pass
+
+   if request.method == 'POST':
+      if request.form.get('login') == 'muzeum' and request.form.get('password') == 'admin':
+         return redirect("/admin/")
+      else:
+         flash('Błędny login/hasło!')
+
+   return render_template('view.html',
+                          connection=connection,
+                          view_data=view_data)
 
 
 @app.route('/insert/', methods=['GET', 'POST'])
@@ -141,10 +163,13 @@ def eksponat_transfer(eksponat_id):
    historia_wypozyczen = get_wypozyczenia_history(eksponat_id)
    historia_wystawien = get_wystawienia_history(eksponat_id)
    stan = get_current_state(eksponat_id, date.today())
+   eksponat_name = get_eksponat_name(eksponat_id)
+   print(eksponat_name)
 
    return render_template("eksponat_transfer.html",
                            connection=connection,
                            id=eksponat_id,
+                           eksponat_name=eksponat_name,
                            eksponaty=eksponaty_with_artysta,
                            historia_wyp=historia_wypozyczen,
                            historia_wyst=historia_wystawien,
@@ -171,8 +196,8 @@ def transfers():
 
 
 
-@app.route('/', methods=['GET', 'POST'])
-def index():
+@app.route('/admin/', methods=['GET', 'POST'])
+def admin():
    cur, con, connection = get_cursor()
 
    if request.method == 'POST':
@@ -190,11 +215,18 @@ def index():
          cur.execute(sql_scripts.DB_SAMPLE)
          con.commit()
          flash('Utworzono bazę z przykładowymi danymi!')
+
+   view_data = []
+   try:
+      view_data = get_view()
+   except Exception:
+      pass
          
    return render_template('start.html',
                           connection=connection,
                           tables=get_visible_tables(),
-                          db_correct=check_if_tables_present())
+                          db_correct=check_if_tables_present(),
+                          view_data=view_data)
 
 if __name__ == "__main__":
    app.run(debug=True)

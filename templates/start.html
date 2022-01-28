@@ -6,11 +6,11 @@
     <body>
         <div id="root">
             <header class="sticky">
-                <a href={{ url_for('index') }} class="logo">MIM Muzeum</a>
+                <a href={{ url_for('admin') }} class="logo">MIM Muzeum</a>
                 <a href={{ url_for('erd') }} class="button">Model ERD</a>
                 <a href={{ url_for('script') }} class="button">Skrypt</a>
                 {% if db_correct %}
-                    <a href={{ url_for('view') }} class="button">Przeglądaj Muzeum</a>
+                    <a href={{ url_for('db_state') }} class="button">Stan Bazy</a>
                     <a href={{ url_for('insert') }} class="button">Wprowadzanie Danych</a>
                     <a href={{ url_for('transfers') }} class="button">Położenie Eksponatu</a>
                 {% else %} 
@@ -20,7 +20,8 @@
 
             <main>
                 <div class="card fluid">
-                    <h3> Muzeum </h3> 
+                    <h2> MIM Muzeum </h2>
+                    <h3> Panel Administratora </h3> 
                     <p> 
                         Projekt na przedmiot Bazy Danych (inf 2021/2022) - program do obsługi muzeum i eksponatów. </br>
                         Numery indeksów: <strong> jp429585+ap406275 </strong> </br>                    
@@ -30,7 +31,7 @@
                 {% if connection %}
                     <div class="container">
                         <div class="row">
-                            <form method ="post" action="{{ url_for('index') }}">
+                            <form method ="post" action="{{ url_for('admin') }}">
                                 <input class="tertiary doc" type="submit" name="create" value="Stwórz puste tabele">
                                 <input class="primary doc" type="submit" name="sample" value="Stwórz tabele i wypełnij przykładowymi danymi">
                                 <input class="secondary doc" type="submit" name="drop" value="Wyczyść bazę">
@@ -43,6 +44,38 @@
                                 </div>
                             {% endfor %}
                         </div>
+                    </div>
+
+                    <div class="card fluid">
+                        <h4> Eksponaty i ich obecne położenie: </h4>     
+                        <table>
+                        <thead>
+                            <tr>
+                            <th>Tytuł</th>
+                            <th>Typ</th>
+                            <th>Imię Artysty</th>
+                            <th>Nazwisko Artysty</th>
+                            <th>Położenie Eksponatu</th>
+                            <th>Wysokość</th>
+                            <th>Szerokość</th>
+                            <th>Waga</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in view_data %}
+                                <tr>
+                                    <td data-label="Tytuł"> {{ row[1] }} </td>
+                                    <td data-label="Typ"> {{ row[2] }} </td>
+                                    <td data-label="Imię Artysty"> {{ row[7] }} </td>
+                                    <td data-label="Nazwisko Artysty"> {{ row[8] }} </td>
+                                    <td data-label="Położenie Eksponatu"> {{ row[9] }} </td>
+                                    <td data-label="Wysokość"> {{ row[3] }} </td>
+                                    <td data-label="Szerokość"> {{ row[4] }} </td>
+                                    <td data-label="Waga"> {{ row[5] }} </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                        </table>
                     </div>
                     <!--
                     <div class="card fluid">

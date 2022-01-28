@@ -1,177 +1,88 @@
 <html>
     <head>
         <link rel="stylesheet" href="https://cdn.rawgit.com/Chalarangelo/mini.css/v3.0.1/dist/mini-default.min.css">
-        <title>Przeglądaj Muzeum</title>
+        <title>MIM Muzeum - Strona dla odwiedzających</title>
     </head>
     <body>
         <div id="root">
-            <header class="sticky">
-                <a href={{ url_for('index') }} class="logo">MIM Muzeum</a>
-                <a href={{ url_for('erd') }} class="button">Model ERD</a>
-                <a href={{ url_for('script') }} class="button">Skrypt</a>
-                <a href={{ url_for('view') }} class="button">Przeglądaj Muzeum</a>
-                <a href={{ url_for('insert') }} class="button">Wprowadzanie Danych</a>
-                <a href={{ url_for('transfers') }} class="button">Położenie Eksponatu</a>
-            </header>
-
             <main>
                 <div class="card fluid">
-                    <h3> Przeglądaj Muzeum </h3> 
+                    <h2> MIM Muzeum </h2>
+                    <h3> Strona dla odwiedzających </h3> 
+                    <p> 
+                        Projekt na przedmiot Bazy Danych (inf 2021/2022) - program do obsługi muzeum i eksponatów. </br>
+                        Numery indeksów: <strong> jp429585+ap406275 </strong> </br>                    
+                    </p>
+                </div>
+
+                <div class="container">
+                    <form method="post" action="{{ url_for('index') }}">
+                        <fieldset>
+                        <legend>Zaloguj się do panelu administratora</legend>
+                        <div class="row responsive-label">
+                            <div class="col-sm-12 col-md-3">
+                                <label for="nazwa"> Login </label>
+                            </div>
+                            <div class="col-sm-12 col-md">
+                                <input type="text" id="login" name="login" placeholder=""/>
+                            </div>   
+                        </div>
+                        <div class="row responsive-label">
+                            <div class="col-sm-12 col-md-3">
+                                <label for="liczba_sal"> Hasło </label>
+                            </div>
+                            <div class="col-sm-12 col-md">
+                                <input type="password" id="password" name="password" placeholder=""/>
+                            </div>
+                        </div>
+                        <div class="row responsive-label">
+                            <div class="col-sm-12 col-md-3">
+                                <input class="tertiary doc" type="submit" id="zaloguj" name="zaloguj" value="zaloguj">
+                            </div>
+                        </div>
+                        </fieldset>
+                    <form>
+                    <div class="row">
+                        {% for message in get_flashed_messages() %}
+                            <div class="card">
+                            <div class="section dark"> {{ message }} </div>
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
 
                 {% if connection %}
                     <div class="card fluid">
-                        <h4> Eksponaty: </h4>     
+                        <h4> Eksponaty i ich obecne położenie: </h4>     
                         <table>
                         <thead>
                             <tr>
-                            <th>ID</th>
                             <th>Tytuł</th>
                             <th>Typ</th>
+                            <th>Imię Artysty</th>
+                            <th>Nazwisko Artysty</th>
+                            <th>Położenie Eksponatu</th>
                             <th>Wysokość</th>
                             <th>Szerokość</th>
                             <th>Waga</th>
-                            <th>Artysta ID</th>
-                            <th>Imię Artysty</th>
-                            <th>Nazwisko Artysty</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for row in eksponaty %}
+                            {% for row in view_data %}
                                 <tr>
-                                    <td data-label="ID"> {{ row[0] }} </td>
                                     <td data-label="Tytuł"> {{ row[1] }} </td>
                                     <td data-label="Typ"> {{ row[2] }} </td>
+                                    <td data-label="Imię Artysty"> {{ row[7] }} </td>
+                                    <td data-label="Nazwisko Artysty"> {{ row[8] }} </td>
+                                    <td data-label="Położenie Eksponatu"> {{ row[9] }} </td>
                                     <td data-label="Wysokość"> {{ row[3] }} </td>
                                     <td data-label="Szerokość"> {{ row[4] }} </td>
                                     <td data-label="Waga"> {{ row[5] }} </td>
-                                    <td data-label="Artysta ID"> {{ row[6] }} </td>
-                                    <td data-label="Imię Artysty"> {{ row[7] }} </td>
-                                    <td data-label="Nazwisko Artysty"> {{ row[8] }} </td>
                                 </tr>
                             {% endfor %}
                         </tbody>
                         </table>
                     </div>
-                    <div class="card fluid">
-                        <h4> Artyści: </h4>     
-                        <table>
-                        <thead>
-                            <tr>
-                            <th>ID</th>
-                            <th>Imię</th>
-                            <th>Nazwisko</th>
-                            <th>Rok Urodzenia</th>
-                            <th>Rok Śmierci</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for row in artysci %}
-                                <tr>
-                                    <td data-label="ID"> {{ row[0] }} </td>
-                                    <td data-label="Imię"> {{ row[1] }} </td>
-                                    <td data-label="Nazwisko"> {{ row[2] }} </td>
-                                    <td data-label="Rok Urodzenia"> {{ row[3] }} </td>
-                                    <td data-label="Rok Śmierci"> {{ row[4] }} </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                        </table>
-                    </div>
-                    <div class="card fluid">
-                        <h4> Galerie: </h4>     
-                        <table>
-                        <thead>
-                            <tr>
-                            <th>ID</th>
-                            <th>Nazwa</th>
-                            <th>Liczba Sal</th>
-                        </thead>
-                        <tbody>
-                            {% for row in galerie %}
-                                <tr>
-                                    <td data-label="ID"> {{ row[0] }} </td>
-                                    <td data-label="Nazwa"> {{ row[1] }} </td>
-                                    <td data-label="Liczba Sal"> {{ row[2] }} </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                        </table>
-                    </div>
-                    
-                    <div class="card fluid">
-                        <h4> Instytucje: </h4>     
-                        <table>
-                        <thead>
-                            <tr>
-                            <th>ID</th>
-                            <th>Nazwa</th>
-                            <th>Miasto</th>
-                        </thead>
-                        <tbody>
-                            {% for row in instytucje %}
-                                <tr>
-                                    <td data-label="ID"> {{ row[0] }} </td>
-                                    <td data-label="Nazwa"> {{ row[1] }} </td>
-                                    <td data-label="Miasto"> {{ row[2] }} </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                        </table>
-                    </div>
-
-                    <div class="card fluid">
-                        <h4> Wystawienie: </h4>     
-                        <table>
-                        <thead>
-                            <tr>
-                            <th>ID</th>
-                            <th>ID Eksponatu</th>
-                            <th>Sala</th>
-                            <th>ID Galerii</th>
-                            <th>Początek</th>
-                            <th>Koniec</th>
-                        </thead>
-                        <tbody>
-                            {% for row in wystawienie %}
-                                <tr>
-                                    <td data-label="ID"> {{ row[0] }} </td>
-                                    <td data-label="ID Eksponatu"> {{ row[1] }} </td>
-                                    <td data-label="Sala"> {{ row[2] }} </td>
-                                    <td data-label="ID Galerii"> {{ row[3] }} </td>
-                                    <td data-label="Początek"> {{ row[4] }} </td>
-                                    <td data-label="Koniec"> {{ row[5] }} </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                        </table>
-                    </div>
-
-                    <div class="card fluid">
-                        <h4> Wypozyczenia: </h4>     
-                        <table>
-                        <thead>
-                            <tr>
-                            <th>ID</th>
-                            <th>ID Eksponatu</th>
-                            <th>ID Instytucji</th>
-                            <th>Początek</th>
-                            <th>Koniec</th>
-                        </thead>
-                        <tbody>
-                            {% for row in wypozyczenie %}
-                                <tr>
-                                    <td data-label="ID"> {{ row[0] }} </td>
-                                    <td data-label="ID Eksponatu"> {{ row[1] }} </td>
-                                    <td data-label="ID Instytucji"> {{ row[2] }} </td>
-                                    <td data-label="Początek"> {{ row[3] }} </td>
-                                    <td data-label="Koniec"> {{ row[4] }} </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                        </table>
-                    </div>
-                    
                 {% else %}
                     <div class="card error">
                         <h4> Uwaga! </h4>

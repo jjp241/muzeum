@@ -6,10 +6,10 @@
     <body>
         <div id="root --back-color='ffffff">
             <header class="sticky">
-                <a href={{ url_for('index') }} class="logo">MIM Muzeum</a>
+                <a href={{ url_for('admin') }} class="logo">MIM Muzeum</a>
                 <a href={{ url_for('erd') }} class="button">Model ERD</a>
                 <a href={{ url_for('script') }} class="button">Skrypt</a>
-                <a href={{ url_for('view') }} class="button">Przeglądaj Muzeum</a>
+                <a href={{ url_for('db_state') }} class="button">Stan Bazy</a>
                 <a href={{ url_for('insert') }} class="button">Wprowadzanie Danych</a>
                 <a href={{ url_for('transfers') }} class="button">Położenie Eksponatu</a>
             </header>
@@ -17,7 +17,10 @@
 
             <main>
                 <div class="card fluid">
-                    <h3> Położenie eksponatu o ID {{ id }}: {{stan}}</h3> 
+                    <h2> {{ id }}: {{eksponat_name}} </h2> 
+                </div>
+                <div class="card fluid">
+                    <h3> Położenie eksponatu: {{stan}}</h3> 
                 </div>
             </main>
 
@@ -80,7 +83,7 @@
                         <legend>Wprowadź Wystawienie w Galerii</legend>
                         <div class="row responsive-label">
                             <div class="col-sm-12 col-md-3">
-                                <label for="id_galerii">Galeria</label>
+                                <label for="id_galerii">ID Galerii</label>
                             </div>
                             <div class="col-sm-12 col-md">
                                 <select id="id_galerii" name="id_galerii">
@@ -104,7 +107,7 @@
                                 <label for="poczatek">Początek wystawienia</label>
                             </div>
                             <div class="col-sm-12 col-md">
-                                <input type="date" id="poczatek" name="poczatek" value="2000-01-01">
+                                <input type="date" id="poczatek" name="poczatek" value="2022-01-01">
                             </div>   
                         </div> 
                         <div class="row responsive-label">
@@ -112,7 +115,7 @@
                                 <label for="koniec">Koniec wystawienia</label>
                             </div>
                             <div class="col-sm-12 col-md">
-                                <input type="date" id="koniec" name="koniec" value="2000-01-01">
+                                <input type="date" id="koniec" name="koniec" value="2022-01-01">
                             </div>   
                         </div>  
                         <div class="row responsive-label">
@@ -122,6 +125,11 @@
                         </div>
                         </fieldset>
                     </form>
+                    {% for message in get_flashed_messages() %}
+                        <div class="card">
+                            <div class="section dark"> {{ message }} </div>
+                        </div>
+                    {% endfor %}
 
 
                     <form method="post" action="{{ url_for('eksponat_transfer', eksponat_id = id) }}">
@@ -129,7 +137,7 @@
                         <legend>Wprowadź wypożyczenie innej instytucji</legend>
                         <div class="row responsive-label">
                             <div class="col-sm-12 col-md-3">
-                                <label for="id_instytucji">Instytucja</label>
+                                <label for="id_instytucji">ID Instytucji</label>
                             </div>
                             <div class="col-sm-12 col-md">
                                 <select id="id_instytucji" name="id_instytucji">
@@ -145,7 +153,7 @@
                                 <label for="poczatek">Początek wypożyczenia</label>
                             </div>
                             <div class="col-sm-12 col-md">
-                                <input type="date" id="poczatek" name="poczatek" value="2000-01-01">
+                                <input type="date" id="poczatek" name="poczatek" value="2022-01-01">
                             </div>   
                         </div> 
                         <div class="row responsive-label">
@@ -153,7 +161,7 @@
                                 <label for="koniec">Koniec wypożyczenia</label>
                             </div>
                             <div class="col-sm-12 col-md">
-                                <input type="date" id="koniec" name="koniec" value="2000-01-01">
+                                <input type="date" id="koniec" name="koniec" value="2022-01-01">
                             </div>   
                         </div>  
                         <div class="row responsive-label">
