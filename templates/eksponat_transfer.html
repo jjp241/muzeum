@@ -26,6 +26,11 @@
             </main>
 
             {% if connection %}
+            {% for message in get_flashed_messages() %}
+                <div class="card">
+                    <div class="section dark"> {{ message }} </div>
+                </div>
+            {% endfor %}
 
             <div class="card fluid">
                 <h4> Historia Wystawień: </h4>     
@@ -78,7 +83,6 @@
             </div>
 
             <div class="card fluid">
-
                     <form method="post" action="{{ url_for('eksponat_transfer', eksponat_id = id) }}">
                         <fieldset>
                         <legend>Wprowadź Wystawienie w Galerii</legend>
@@ -126,11 +130,6 @@
                         </div>
                         </fieldset>
                     </form>
-                    {% for message in get_flashed_messages() %}
-                        <div class="card">
-                            <div class="section dark"> {{ message }} </div>
-                        </div>
-                    {% endfor %}
 
                     <form method="post" action="{{ url_for('eksponat_transfer', eksponat_id = id) }}">
                         <fieldset>
@@ -170,12 +169,7 @@
                             </div>
                         </div>
                         </fieldset>
-                    </form>
-                    {% for message in get_flashed_messages() %}
-                        <div class="card">
-                            <div class="section dark"> {{ message }} </div>
-                        </div>
-                    {% endfor %}                   
+                    </form>                
                 {% else %}
                     <div class="card error">
                         <h4> Uwaga! </h4>

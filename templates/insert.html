@@ -20,6 +20,11 @@
                     <h3> Wprowadzanie Danych </h3> 
                 </div>
                 {% if connection %}
+                    {% for message in get_flashed_messages() %}
+                        <div class="card">
+                            <div class="section dark"> {{ message }} </div>
+                        </div>
+                    {% endfor %}
                     <form method="post" action="{{ url_for('insert') }}">
                         <fieldset>
                         <legend>Dodaj Eksponat (i Artystę)</legend>
@@ -174,12 +179,35 @@
                             </div>
                         </div>
                         </fieldset>
-                    <form>
-                    {% for message in get_flashed_messages() %}
-                        <div class="card">
-                            <div class="section dark"> {{ message }} </div>
+                    </form>
+
+                    <form method="post" action="{{ url_for('insert') }}">
+                        <fieldset>
+                        <legend>Dodaj Insytucję</legend>
+                        <div class="row responsive-label">
+                            <div class="col-sm-12 col-md-3">
+                                <label for="nazwa"> Nazwa Instytucji </label>
+                            </div>
+                            <div class="col-sm-12 col-md">
+                                <input type="text" id="nazwa" name="nazwa" placeholder="Nazwa"/>
+                            </div>   
                         </div>
-                    {% endfor %}
+                        <div class="row responsive-label">
+                            <div class="col-sm-12 col-md-3">
+                                <label for="liczba_sal">Miasto</label>
+                            </div>
+                            <div class="col-sm-12 col-md">
+                                <input type="text" id="miasto" name="miasto" placeholder="Miasto"/>
+                            </div>
+                        </div>
+                        <div class="row responsive-label">
+                            <div class="col-sm-12 col-md-3">
+                                <input class="tertiary doc" type="submit" id="dodaj_instytucje" name="dodaj_instytucje" value="Dodaj Instytucję">
+                            </div>
+                        </div>
+                        </fieldset>
+                    </form>
+                    
                 {% else %}
                     <div class="card error">
                         <h4> Uwaga! </h4>

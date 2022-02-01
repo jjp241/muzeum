@@ -107,6 +107,21 @@ def insert():
          except Exception as e:
             print(e)
             flash(e)
+
+      if request.form.get('dodaj_instytucje'):
+         next_instytucja_id = get_next_free_id('instytucja')
+
+         instytucja_form = dict(request.form)
+         instytucja_form['id'] = next_instytucja_id
+
+         print(instytucja_form)
+
+         try:
+            add_to_instytucja(instytucja_form)
+            flash('Pomyślnie dodano Instytucję!')
+         except Exception as e:
+            print(e)
+            flash(e)
       
    db = get_whole_database()
 
