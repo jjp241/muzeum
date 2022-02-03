@@ -104,7 +104,7 @@
                                     <select id="artysta_id" name="artysta_id">
                                         <option> Artysta Nieznany </option> 
                                         {% for row in artysci %}
-                                            <option> {{ row[0] }} </option>
+                                            <option value={{ row[0] }}> {{ row[0] }}: {{ row[1] }} {{ row[2] }} </option>
                                         {% endfor %}
                                     </select>
                                 </div>

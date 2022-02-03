@@ -88,12 +88,12 @@
                         <legend>Wprowadź Wystawienie w Galerii</legend>
                         <div class="row responsive-label">
                             <div class="col-sm-12 col-md-3">
-                                <label for="id_galerii">ID Galerii</label>
+                                <label for="id_galerii">Galeria</label>
                             </div>
                             <div class="col-sm-12 col-md">
                                 <select id="id_galerii" name="id_galerii">
                                     {% for row in galerie %}
-                                        <option> {{row[0]}} </option>
+                                        <option value={{ row[0] }}> {{ row[0] }} : {{ row[1] }}, liczba sal: {{ row[2] }} </option>
                                     {% endfor %}
                                 </select>
                             </div>      
@@ -136,12 +136,12 @@
                         <legend>Wprowadź wypożyczenie innej instytucji</legend>
                         <div class="row responsive-label">
                             <div class="col-sm-12 col-md-3">
-                                <label for="id_instytucji">ID Instytucji</label>
+                                <label for="id_instytucji">Instytucja</label>
                             </div>
                             <div class="col-sm-12 col-md">
                                 <select id="id_instytucji" name="id_instytucji">
                                     {% for row in instytucje %}
-                                        <option> {{row[0]}} </option>
+                                        <option value={{ row[0] }}> {{row[0]}}: {{row[1]}}, {{row[2]}} </option>
                                     {% endfor %}
                                 </select>
                             </div>      
